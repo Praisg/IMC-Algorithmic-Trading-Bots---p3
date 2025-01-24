@@ -1,3 +1,23 @@
+"""add the online_trading function that will open trades according to our model forecast.
+
+The online_trading function takes the following arguments:
+
+    symbol - traded symbol
+    features - list of features to be used to make forecasts
+    model - trained model to be used to make forecasts
+
+Inside the online_trading function, we first connect to the MetaTrader 5 terminal using the path specified in terminal_path. Then we get the current symbol prices using the mt5.symbol_info_tick(symbol) function.
+
+Next, we use our model to predict the signal based on the passed features. If the forecast is positive (more than 0.5), we open a long position, and if the forecast is negative (less than 0.5), we open a short position.
+
+We also set stop loss and take profit for each trade to minimize risks.
+
+If we have already reached the maximum number of open trades (set in the MAX_OPEN_TRADES constant), we do not open new ones and wait until one of the open trades is closed.
+
+If the forecast does not allow us to open a new trade, we also wait until a new signal appears.
+
+At the end of the function, we return the result of the trade execution if it was successfully placed, or None if a trade was not placed."""
+
 def online_trading(symbol, features, model):
     terminal_path = "C:/Program Files/RoboForex - MetaTrader 5/Arima/terminal64.exe"
 
@@ -103,4 +123,4 @@ def process_symbol(symbol):
         labeled_data_engineered = feature_engineering(labeled_data_clustered, n_features_to_select=10)
 
         # Train XGBoost classifier
-        train_data = labeled_data_engineered[labeled_data_engineered.index <= FORWARD]
+        train_data = labeled_data_engineered[labeled_data_engineered.index <= FORWARD] 
